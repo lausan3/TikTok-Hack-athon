@@ -7,11 +7,9 @@ import (
 )
 
 func PostRoutes(router *gin.Engine) {
-	posts := router.Group("/posts")
+	index := router.Group("/posts")
 
-	posts.GET("/create-post", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "layout.html", gin.H{
-			"content": "create-post.html",
-		})
+	index.GET("/create-post", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "create-post.html", gin.H{})
 	})
 }

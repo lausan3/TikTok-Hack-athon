@@ -45,3 +45,13 @@ func (m UserModel) Register(user forms.RegisterForm, db *sql.DB) error {
 
 	return nil
 }
+
+func (m UserModel) Delete(id int, db *sql.DB) error {
+	_, err := db.Query("DELETE FROM users WHERE id = ?", id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
