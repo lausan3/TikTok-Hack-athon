@@ -13,6 +13,7 @@ func main() {
 	}
 
 	db := connections.OpenMySQLConnection()
+	defer db.Close()
 
 	router := routers.Routes(db)
 
