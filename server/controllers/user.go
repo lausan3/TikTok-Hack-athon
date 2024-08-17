@@ -41,6 +41,28 @@ func (u *UserController) RegisterUser(c *gin.Context, db *sql.DB) (user models.U
 	return user, nil
 }
 
+func (u *UserController) GetUser(c *gin.Context, db *sql.DB) (user models.User, err error) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid ID",
+		})
+		return user, err
+	}
+
+	user, err = userModel.Get(id, db)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return user, err
+	}
+
+	c.JSON(http.StatusOK, user)
+
+	return user, nil
+}
+
 // Delete a user
 func (u *UserController) DeleteUser(c *gin.Context, db *sql.DB) (err error) {
 

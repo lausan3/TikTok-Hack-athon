@@ -46,6 +46,30 @@ func (m UserModel) Register(user forms.RegisterForm, db *sql.DB) error {
 	return nil
 }
 
+func (m UserModel) Get(id int, db *sql.DB) (User, error) {
+	var user User
+
+	// check if user exists
+	check, err := db.Query("SELECT * FROM users WHERE id = ?", id)
+
+	if err != nil {
+		return user, err
+	}
+
+	if !check.Next() {
+		return user, errors.New("User does not exist")
+	}
+
+	// get user
+	err = db.QueryRow("SELECT * FROM users WHERE id = ?", id).Scan(&user.ID, &user.UserName, &user.Password, &user.CreatedAt)
+
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
+}
+
 func (m UserModel) Delete(id int, db *sql.DB) error {
 	// check if user exists
 	check, err := db.Query("SELECT * FROM users WHERE id = ?", id)

@@ -18,4 +18,9 @@ func UserRoutes(router *gin.RouterGroup, db *sql.DB) {
 		controller := new(controllers.UserController)
 		controller.DeleteUser(c, db)
 	})
+
+	router.GET("user/:id", func(c *gin.Context) {
+		controller := new(controllers.UserController)
+		controller.GetUser(c, db)
+	})
 }
