@@ -2,6 +2,7 @@ package main
 
 import (
 	"main/config"
+	"main/db/connections"
 	"main/infra/logger"
 	"main/routers"
 )
@@ -11,7 +12,9 @@ func main() {
 		logger.Fatalf("config SetupConfig() error: %s", err)
 	}
 
-	router := routers.Routes()
+	db := connections.OpenMySQLConnection()
+
+	router := routers.Routes(db)
 
 	logger.Fatalf("%v", router.Run(config.ServerConfig()))
 }

@@ -1,13 +1,14 @@
 package routers
 
 import (
+	"database/sql"
 	"main/routers/middleware"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
 
-func Routes() *gin.Engine {
+func Routes(db *sql.DB) *gin.Engine {
 	environment := viper.GetBool("DEBUG")
 
 	if environment {
@@ -23,7 +24,7 @@ func Routes() *gin.Engine {
 	router.Use(gin.Recovery())
 	router.Use(middleware.CORSMiddleware())
 
-	RegisterRoutes(router) //routes register
+	RegisterRoutes(router, db)
 
 	return router
 }
