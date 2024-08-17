@@ -22,5 +22,6 @@ func RegisterRoutes(router *gin.Engine, db *sql.DB) {
 	router.GET("/health", func(ctx *gin.Context) { ctx.JSON(http.StatusOK, gin.H{"live": "ok"}) })
 
 	routers.IndexRoutes(router)
+	routers.PostRoutes(router)
 	routers.DatabaseRoutes(router, db)
 }
