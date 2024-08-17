@@ -1,21 +1,17 @@
 package main
 
 import (
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+	"main/config"
+	"main/infra/logger"
+	"main/routers"
 )
 
 func main() {
-	router := gin.Default()
+	if err := config.SetupConfig(); err != nil {
+		logger.Fatalf("config SetupConfig() error: %s", err)
+	}
 
-	router.LoadHTMLGlob("templates/*")
+	router := routers.Routes()
 
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", gin.H{
-			"title": "Main Website",
-		})
-	})
-
-	router.Run()
+	logger.Fatalf("%v", router.Run(config.ServerConfig()))
 }
