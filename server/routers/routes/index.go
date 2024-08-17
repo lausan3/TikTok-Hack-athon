@@ -9,9 +9,9 @@ import (
 func IndexRoutes(router *gin.Engine) {
 	index := router.Group("/")
 
-	index.GET("", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", gin.H{
-			"title": "LETS GOOOO",
+	index.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "layout.html", gin.H{
+			"content": "home.html",
 		})
 	})
 }
