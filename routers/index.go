@@ -22,4 +22,5 @@ func RegisterRoutes(router *gin.Engine, db *sql.DB) {
 
 	routers.IndexRoutes(router)
 	routers.RegisterAPIRoutes(router, db)
+	routers.PostRoutes(router)
 }
