@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"main/forms"
+	"main/infra/utils"
 )
 
 /**
@@ -27,23 +28,51 @@ type Post struct {
 
 type PostModel struct{}
 
-func (m PostModel) Create(post forms.CreatePostForm, db *sql.DB) error {
-	// Create a new post
-	// check if user exists
-	check, err := db.Query("SELECT * FROM users WHERE id = ?", post.UserID)
+func (m PostModel) Create(username string, post forms.CreatePostForm, db *sql.DB) error {
+	check, err := utils.CheckIfUserExists(username, db)
 	if err != nil {
 		return err
 	}
 
-	if !check.Next() {
+	if !check {
 		return errors.New("User does not exist")
 	}
 
-	_, err = db.Query("INSERT INTO posts (user_id, title, content) VALUES (?, ?, ?)", post.UserID, post.Title, post.Content)
-
+	_, err = db.Query("INSERT INTO posts (user_id, title, content) VALUES ((SELECT id FROM users WHERE user_name = ?), ?, ?)", username, post.Title, post.Content)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func (m PostModel) GetPostsByUser(username string, db *sql.DB) ([]Post, error) {
+	// check if user exists
+	check, err := utils.CheckIfUserExists(username, db)
+	if err != nil {
+		return nil, err
+	}
+
+	if !check {
+		return nil, errors.New("User does not exist")
+	}
+
+	var posts []Post
+
+	postsQuery, err := db.Query("SELECT * FROM posts WHERE user_id = (SELECT id FROM users WHERE user_name = ?)", username)
+	if err != nil {
+		return nil, err
+	}
+
+	for postsQuery.Next() {
+		var post Post
+		err = postsQuery.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &post.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		posts = append(posts, post)
+	}
+
+	return posts, nil
 }

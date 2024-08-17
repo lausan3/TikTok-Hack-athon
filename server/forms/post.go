@@ -13,7 +13,6 @@ type PostForm struct{}
 type CreatePostForm struct {
 	Title   string `json:"title" binding:"required"`
 	Content string `json:"content" binding:"required"`
-	UserID  int    `json:"user_id" binding:"required"`
 }
 
 func (p PostForm) Title(tag string, errMsg ...string) (message string) {

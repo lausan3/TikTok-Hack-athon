@@ -17,6 +17,7 @@ var postForm = new(forms.PostForm)
 
 func (p *PostController) CreatePost(c *gin.Context, db *sql.DB) (post models.Post, err error) {
 	var postFormCreate forms.CreatePostForm
+	username := c.Param("username")
 
 	if validatorErr := c.ShouldBindJSON(&postFormCreate); validatorErr != nil {
 		message := postForm.Create(validatorErr)
@@ -26,7 +27,7 @@ func (p *PostController) CreatePost(c *gin.Context, db *sql.DB) (post models.Pos
 		return post, validatorErr
 	}
 
-	if validatorErr := postModel.Create(postFormCreate, db); validatorErr != nil {
+	if validatorErr := postModel.Create(username, postFormCreate, db); validatorErr != nil {
 		fmt.Println(validatorErr)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": validatorErr.Error(),
@@ -39,4 +40,22 @@ func (p *PostController) CreatePost(c *gin.Context, db *sql.DB) (post models.Pos
 	})
 
 	return post, nil
+}
+
+func (p *PostController) GetPostsByUser(c *gin.Context, db *sql.DB) (posts []models.Post, err error) {
+	username := c.Param("username")
+
+	posts, err = postModel.GetPostsByUser(username, db)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return posts, err
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"posts": posts,
+	})
+
+	return posts, nil
 }
