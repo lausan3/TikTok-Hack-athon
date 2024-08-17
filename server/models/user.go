@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"main/forms"
+	"main/infra/utils"
 )
 
 /**
@@ -25,14 +26,14 @@ type User struct {
 type UserModel struct{}
 
 func (m UserModel) Register(user forms.RegisterForm, db *sql.DB) error {
-	// Check if user already exists
-	check, err := db.Query("SELECT * FROM users WHERE user_name = ?", user.UserName)
+	// check if user exists
+	check, err := utils.CheckIfUserExists(user.UserName, db)
 
 	if err != nil {
 		return err
 	}
 
-	if check.Next() {
+	if check {
 		return errors.New("User already exists")
 	}
 
@@ -46,22 +47,21 @@ func (m UserModel) Register(user forms.RegisterForm, db *sql.DB) error {
 	return nil
 }
 
-func (m UserModel) Get(id int, db *sql.DB) (User, error) {
+func (m UserModel) Get(userName string, db *sql.DB) (User, error) {
 	var user User
 
-	// check if user exists
-	check, err := db.Query("SELECT * FROM users WHERE id = ?", id)
+	check, err := utils.CheckIfUserExists(userName, db)
 
 	if err != nil {
 		return user, err
 	}
 
-	if !check.Next() {
+	if !check {
 		return user, errors.New("User does not exist")
 	}
 
 	// get user
-	err = db.QueryRow("SELECT * FROM users WHERE id = ?", id).Scan(&user.ID, &user.UserName, &user.Password, &user.CreatedAt)
+	err = db.QueryRow("SELECT * FROM users WHERE user_name = ?", userName).Scan(&user.ID, &user.UserName, &user.Password, &user.CreatedAt)
 
 	if err != nil {
 		return user, err
@@ -70,27 +70,27 @@ func (m UserModel) Get(id int, db *sql.DB) (User, error) {
 	return user, nil
 }
 
-func (m UserModel) Delete(id int, db *sql.DB) error {
+func (m UserModel) Delete(userName string, db *sql.DB) error {
 	// check if user exists
-	check, err := db.Query("SELECT * FROM users WHERE id = ?", id)
+	check, err := utils.CheckIfUserExists(userName, db)
 
 	if err != nil {
 		return err
 	}
 
-	if !check.Next() {
+	if !check {
 		return errors.New("User does not exist")
 	}
 
 	// delete all posts by user
-	_, err = db.Query("DELETE FROM posts WHERE user_id = ?", id)
+	_, err = db.Query("DELETE FROM posts WHERE user_name = ?", userName)
 
 	if err != nil {
 		return err
 	}
 
 	// delete user
-	_, err = db.Query("DELETE FROM users WHERE id = ?", id)
+	_, err = db.Query("DELETE FROM users WHERE user_name = ?", userName)
 
 	if err != nil {
 		return err

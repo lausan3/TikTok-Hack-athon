@@ -5,7 +5,6 @@ import (
 	"main/forms"
 	"main/models"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -42,15 +41,9 @@ func (u *UserController) RegisterUser(c *gin.Context, db *sql.DB) (user models.U
 }
 
 func (u *UserController) GetUser(c *gin.Context, db *sql.DB) (user models.User, err error) {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid ID",
-		})
-		return user, err
-	}
+	username := c.Param("username")
 
-	user, err = userModel.Get(id, db)
+	user, err = userModel.Get(username, db)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -66,13 +59,7 @@ func (u *UserController) GetUser(c *gin.Context, db *sql.DB) (user models.User, 
 // Delete a user
 func (u *UserController) DeleteUser(c *gin.Context, db *sql.DB) (err error) {
 
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid ID",
-		})
-		return err
-	}
+	id := c.Param("username")
 
 	if err := userModel.Delete(id, db); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
