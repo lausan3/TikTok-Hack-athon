@@ -47,7 +47,26 @@ func (m UserModel) Register(user forms.RegisterForm, db *sql.DB) error {
 }
 
 func (m UserModel) Delete(id int, db *sql.DB) error {
-	_, err := db.Query("DELETE FROM users WHERE id = ?", id)
+	// check if user exists
+	check, err := db.Query("SELECT * FROM users WHERE id = ?", id)
+
+	if err != nil {
+		return err
+	}
+
+	if !check.Next() {
+		return errors.New("User does not exist")
+	}
+
+	// delete all posts by user
+	_, err = db.Query("DELETE FROM posts WHERE user_id = ?", id)
+
+	if err != nil {
+		return err
+	}
+
+	// delete user
+	_, err = db.Query("DELETE FROM users WHERE id = ?", id)
 
 	if err != nil {
 		return err

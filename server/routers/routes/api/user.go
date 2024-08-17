@@ -14,4 +14,8 @@ func UserRoutes(router *gin.RouterGroup, db *sql.DB) {
 		controller.RegisterUser(c, db)
 	})
 
+	router.DELETE("user/:id", func(c *gin.Context) {
+		controller := new(controllers.UserController)
+		controller.DeleteUser(c, db)
+	})
 }
