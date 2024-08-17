@@ -16,5 +16,4 @@ func RegisterRoutes(router *gin.Engine, db *sql.DB) {
 	router.GET("/health", func(ctx *gin.Context) { ctx.JSON(http.StatusOK, gin.H{"live": "ok"}) })
 
 	routers.RegisterAPIRoutes(router, db)
-	routers.PostRoutes(router)
 }
