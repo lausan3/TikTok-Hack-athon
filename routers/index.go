@@ -10,7 +10,10 @@ import (
 )
 
 func RegisterRoutes(router *gin.Engine, db *sql.DB) {
-	router.LoadHTMLGlob("site/templates/*.html")
+	router.LoadHTMLGlob("site/templates/*")
+
+	// Load scripts
+	router.Static("/site/scripts/", "./site/scripts/")
 
 	// 404 Route
 	router.NoRoute(func(ctx *gin.Context) {
