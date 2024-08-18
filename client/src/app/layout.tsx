@@ -20,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className}`}>
-        {children}
+        <div className="text-white h-dvh w-dvw flex flex-col gap-y-4 bg-gradient-radial from-gray-800 to-zinc-900">
+          {children}
+        </div>
       </body>
     </html>
   );

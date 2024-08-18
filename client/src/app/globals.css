@@ -1,3 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  
+  .footer-link {
+    @apply text-lg transition-colors
+    hover:text-blue-500;
+  }
+  
+  .nav-link {
+    @apply text-lg transition-colors duration-500 px-4 py-2 rounded-lg border border-zinc-700 shadow-lg
+    hover:bg-bg-on-hover;
+  }
+}
+
+@layer utilities {
+  .bg-header-footer {
+    @apply bg-zinc-800;
+  }
+}
+
+@layer base {
+  button {
+    @apply p-2 bg-bg-primary rounded-lg transition-colors duration-300
+    hover:bg-bg-on-hover;
+  }
+  
+  label {
+    @apply text-lg m-0;
+  }
+  
+  input, textarea {
+    @apply p-2 border border-zinc-700 bg-bg-primary rounded-lg hover:bg-bg-on-hover transition-colors duration-300;
+  }
+  
+  input::placeholder, textarea::placeholder {
+    @apply text-zinc-400;
+  }
+
+}

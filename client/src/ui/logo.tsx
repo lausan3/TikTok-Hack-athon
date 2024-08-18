@@ -4,7 +4,7 @@ export default function Logo() {
   return (
     <Link 
       id="logo" 
-      className="flex flex-row p-4 text-center" 
+      className="flex flex-row text-center flex-grow" 
       href="/"
     >
       <h1 className="text-4xl font-semibold drop-shadow-logo-red">Tik</h1>

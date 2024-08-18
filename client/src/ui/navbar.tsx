@@ -3,14 +3,13 @@ import Logo from "./logo";
 
 export default function Navbar() {
   return (
-    <nav id="navbar" className="flex flex-row items-center">
+    <nav id="navbar" className="flex flex-row items-center bg-header-footer px-6 py-4 shadow-md shadow-zinc-800">
 
       <Logo />
 
       <Link
         href="/posts/create-post"
-        className="flex justify-self-end items-center p-2 h-fit border border-black rounded-lg
-        hover:bg-red-400"
+        className="nav-link"
       >
         Create Post
       </Link>
