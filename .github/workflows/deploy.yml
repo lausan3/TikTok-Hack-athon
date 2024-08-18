@@ -20,6 +20,5 @@ jobs:
         port: 22
         script: |
           docker pull ${{ secrets.DOCKERHUB_TAGS }}  # Pull the latest image
-          docker stop server || true  # Stop the running container if it exists
-          docker rm server || true  # Remove the container if it exists
+          sudo docker rm -f $(docker ps -aq)
           docker run -d -p 80:3000 ${{ secrets.DOCKERHUB_TAGS }}  # Run the new container
