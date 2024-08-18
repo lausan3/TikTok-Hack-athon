@@ -17,8 +17,8 @@ type Token struct {
 }
 
 func GenerateToken(username string) (Token, error) {
-	fmt.Printf("Token expiration: %v\n", viper.GetDuration("API_JWT_EXPIARY"))
-	expirayTime := time.Now().Add(time.Hour * viper.GetDuration("API_JWT_EXPIARY")).Unix()
+	fmt.Printf("Token expiration: %v\n", viper.GetDuration("API_JWT_EXPIRY"))
+	expirayTime := time.Now().Add(time.Hour * viper.GetDuration("API_JWT_EXPIRY")).Unix()
 
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
