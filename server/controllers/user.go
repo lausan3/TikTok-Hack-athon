@@ -28,7 +28,7 @@ func (u *UserController) RegisterUser(c *gin.Context, db *sql.DB) (user models.U
 
 	if err := userModel.Register(registerForm, db); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err,
+			"error": err.Error(),
 		})
 		return user, err
 	}
