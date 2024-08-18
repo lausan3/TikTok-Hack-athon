@@ -24,11 +24,12 @@ export default function Sidebar() {
     
     if (loggedIn) {
       intervalId = setInterval(() => { 
-        console.log("Checking for notifications...");
         const prevNotifications = localStorage.getItem("notifications");
-        
+
         if (prevNotifications) {
           setNotifications(JSON.parse(prevNotifications));
+        } else {
+          setNotifications([]);
         }
 
         // Check if WebSocket is not open and reconnect if necessary
@@ -71,7 +72,7 @@ export default function Sidebar() {
           loggedIn ? (
             notifications.length > 0 ? 
               notifications.map((notification, index) => 
-                <Notification index={index} notification={notification}/>
+                <Notification key={index} notification={notification}/>
               ) 
             :
               <p className="notification">No notifications D:</p>
