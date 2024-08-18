@@ -3,7 +3,7 @@ package controllers
 import (
 	"database/sql"
 	"main/forms"
-	validator "main/infra/utils/validator"
+	validator "main/infra/utils/validators"
 	"main/models"
 	"net/http"
 

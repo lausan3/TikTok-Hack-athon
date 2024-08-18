@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	validator "main/infra/utils/validator"
+	validator "main/infra/utils/validators"
 
 	"github.com/gin-gonic/gin"
 )

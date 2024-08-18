@@ -5,7 +5,7 @@ import (
 	"errors"
 	"main/forms"
 	utils "main/infra/utils"
-	validator "main/infra/utils/validator"
+	validator "main/infra/utils/validators"
 )
 
 type User struct {
