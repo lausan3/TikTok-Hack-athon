@@ -1,6 +1,6 @@
 "use client"
 
-import fetchPostsForUsername from "@/app/lib/fetch-user-posts";
+import { fetchAllPosts } from "@/lib/fetch-posts";
 import { IPostData } from "@/types/types";
 import { useEffect, useState } from "react";
 import { PostSkeleton } from "../skeletons";
@@ -11,7 +11,7 @@ export default function Posts() {
   useEffect(() => {
     const getPosts = async () => {
       try {
-        const posts = await fetchPostsForUsername("user2")
+        const posts = await fetchAllPosts()
         .then(data => data?.posts)
         .catch(error => console.error(error))
           
@@ -31,7 +31,7 @@ export default function Posts() {
       }
     }
     
-    setTimeout(() => getPosts(), 2000)
+    setTimeout(() => getPosts(), 750)
   }, [])
 
   const [posts, setPosts] = useState<IPostData[]>([]);
