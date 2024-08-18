@@ -41,7 +41,7 @@ func TokenValid(c *gin.Context) error {
 	tokenString := ExtractToken(c)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("Unexpected signing method")
+			return nil, errors.New("unexpected signing method")
 		}
 		return []byte(viper.GetString("API_JWT_SECRET_KEY")), nil
 	})
@@ -69,4 +69,35 @@ func ExtractToken(c *gin.Context) string {
 		return strings.Split(bearerToken, " ")[1]
 	}
 	return ""
+}
+
+func VerifyToken(c *gin.Context) (*jwt.Token, error) {
+	tokenString := ExtractToken(c)
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("unexpected signing method")
+		}
+		return []byte(viper.GetString("API_JWT_SECRET_KEY")), nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return token, nil
+}
+
+func ExtractTokenMetadata(c *gin.Context) (string, error) {
+	token, err := VerifyToken(c)
+	if err != nil {
+		return "", err
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if ok && token.Valid {
+		username := claims["user"].(string)
+		return username, nil
+	}
+
+	return "", err
 }
