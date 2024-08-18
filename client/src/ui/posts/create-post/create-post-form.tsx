@@ -39,14 +39,14 @@ export default function CreatePostForm() {
 
   return (
     <form 
-      className="form-container  sm:1/2 lg:1/4"
+      className="form-container w-1/3 sm:w-1/2"
       onSubmit={(e) => handleSubmit(e)}
     >
       <h1 className="w-1/2 text-xl font-bold text-center mb-4">Share your thoughts with the world, we won't judge.</h1>
 
       <p className={`${error ? 'text-red-500' : 'hidden'} text-sm`}>{error}</p>
 
-      <div className="flex flex-col my-4 gap-y-4">
+      <div className="flex flex-col my-4 gap-y-4 w-1/2">
 
         <div className="flex flex-col space-y-1">
           <label htmlFor="title">Title</label>

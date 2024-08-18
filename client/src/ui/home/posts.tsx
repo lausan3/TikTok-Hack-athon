@@ -25,7 +25,7 @@ export default function Posts() {
           return console.error("Posts is not an array");
         }
         
-        setPosts(posts as IPostData[]);
+        setPosts(posts.reverse() as IPostData[]);
       } catch (error) {
         console.error(error);
       }
