@@ -13,6 +13,18 @@
     @apply text-lg transition-colors duration-500 px-4 py-2 rounded-lg border border-zinc-700 shadow-lg
     hover:bg-bg-on-hover;
   }
+
+  .sidebar-stack {
+    @apply flex flex-col gap-y-3;
+  }
+
+  .subheading-text {
+    @apply text-lg font-semibold px-1;
+  }
+
+  .notification {
+    @apply px-1;
+  }
 }
 
 @layer utilities {
