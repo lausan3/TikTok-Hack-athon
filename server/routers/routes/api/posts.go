@@ -4,19 +4,19 @@ import (
 	"database/sql"
 
 	controllers "main/controllers"
+	"main/routers/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
 func PostRoutes(router *gin.RouterGroup, db *sql.DB) {
-
 	// get all posts
 	router.GET("posts", func(c *gin.Context) {
 		controller := new(controllers.PostController)
 		controller.GetAllPosts(c, db)
 	})
 
-	router.POST("posts/:username", func(c *gin.Context) {
+	router.POST("posts/:username", middleware.JwtAuthMiddleware(), func(c *gin.Context) {
 		controller := new(controllers.PostController)
 		controller.CreatePost(c, db)
 	})
