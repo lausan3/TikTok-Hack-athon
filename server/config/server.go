@@ -15,7 +15,7 @@ type ServerConfiguration struct {
 
 func ServerConfig() string {
 	viper.SetDefault("SERVER_HOST", "0.0.0.0")
-	viper.SetDefault("SERVER_PORT", "8000")
+	viper.SetDefault("SERVER_PORT", "3000")
 
 	appServer := fmt.Sprintf("%s:%s", viper.GetString("SERVER_HOST"), viper.GetString("SERVER_PORT"))
 	logger.Infof("Server Running at %s", appServer)

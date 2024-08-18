@@ -1,0 +1,24 @@
+name: Deploy Server
+
+on:
+  workflow_run:
+    workflows: ["Docker Build"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v0.1.0
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        port: 22
+        script: |
+          docker pull ${{ secrets.DOCKERHUB_TAGS }}  # Pull the latest image
+          sudo docker rm -f $(docker ps -aq)
+          docker run -d -p 80:3000 ${{ secrets.DOCKERHUB_TAGS }}  # Run the new container
