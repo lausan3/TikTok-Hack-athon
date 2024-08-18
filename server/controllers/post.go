@@ -60,7 +60,7 @@ func (p *PostController) GetPostsByUser(c *gin.Context, db *sql.DB) (posts []mod
 	return posts, nil
 }
 
-func (p *PostController) GetAllPosts(c *gin.Context, db *sql.DB) (posts []models.Post, err error) {
+func (p *PostController) GetAllPosts(c *gin.Context, db *sql.DB) (posts []models.PostResponse, err error) {
 	posts, err = postModel.GetAllPosts(db)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

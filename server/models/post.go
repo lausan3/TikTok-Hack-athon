@@ -10,6 +10,16 @@ import (
 type Post struct {
 	ID        int    `json:"id"`
 	UserID    int    `json:"user_id"`
+	UserName  string `json:"user_name"`
+	Title     string `json:"title"`
+	Content   string `json:"content"`
+	CreatedAt string `json:"created_at"`
+}
+
+type PostResponse struct {
+	ID        int    `json:"id"`
+	UserID    int    `json:"user_id"`
+	UserName  string `json:"user_name"`
 	Title     string `json:"title"`
 	Content   string `json:"content"`
 	CreatedAt string `json:"created_at"`
@@ -27,7 +37,7 @@ func (m PostModel) Create(username string, post forms.CreatePostForm, db *sql.DB
 		return errors.New("User does not exist")
 	}
 
-	_, err = db.Query("INSERT INTO posts (user_id, title, content) VALUES ((SELECT id FROM users WHERE user_name = ?), ?, ?)", username, post.Title, post.Content)
+	_, err = db.Query("INSERT INTO posts (user_id, user_name, title, content) VALUES ((SELECT id FROM users WHERE user_name = ?), ?, ?, ?)", username, username, post.Title, post.Content)
 	if err != nil {
 		return err
 	}
@@ -48,14 +58,14 @@ func (m PostModel) GetPostsByUser(username string, db *sql.DB) ([]Post, error) {
 
 	var posts []Post
 
-	postsQuery, err := db.Query("SELECT * FROM posts WHERE user_id = (SELECT id FROM users WHERE user_name = ?)", username)
+	postsQuery, err := db.Query("SELECT * FROM posts WHERE user_name = ?", username)
 	if err != nil {
 		return nil, err
 	}
 
 	for postsQuery.Next() {
 		var post Post
-		err = postsQuery.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &post.CreatedAt)
+		err = postsQuery.Scan(&post.ID, &post.UserID, &post.UserName, &post.Title, &post.Content, &post.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
@@ -66,8 +76,8 @@ func (m PostModel) GetPostsByUser(username string, db *sql.DB) ([]Post, error) {
 	return posts, nil
 }
 
-func (m PostModel) GetAllPosts(db *sql.DB) ([]Post, error) {
-	var posts []Post
+func (m PostModel) GetAllPosts(db *sql.DB) ([]PostResponse, error) {
+	var posts []PostResponse
 
 	postsQuery, err := db.Query("SELECT * FROM posts")
 	if err != nil {
@@ -75,8 +85,8 @@ func (m PostModel) GetAllPosts(db *sql.DB) ([]Post, error) {
 	}
 
 	for postsQuery.Next() {
-		var post Post
-		err = postsQuery.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &post.CreatedAt)
+		var post PostResponse
+		err = postsQuery.Scan(&post.ID, &post.UserID, &post.UserName, &post.Title, &post.Content, &post.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
