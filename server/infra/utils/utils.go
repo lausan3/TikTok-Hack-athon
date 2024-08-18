@@ -2,6 +2,8 @@ package utils
 
 import (
 	"database/sql"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func CheckIfUserExists(userName string, db *sql.DB) (bool, error) {
@@ -16,4 +18,14 @@ func CheckIfUserExists(userName string, db *sql.DB) (bool, error) {
 	}
 
 	return false, nil
+}
+
+func GeneratePasswordHash(password string) (string, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+
+	if err != nil {
+		return "", err
+	}
+
+	return string(hashedPassword), nil
 }

@@ -76,3 +76,24 @@ func (m PostModel) GetPostsByUser(username string, db *sql.DB) ([]Post, error) {
 
 	return posts, nil
 }
+
+func (m PostModel) GetAllPosts(db *sql.DB) ([]Post, error) {
+	var posts []Post
+
+	postsQuery, err := db.Query("SELECT * FROM posts")
+	if err != nil {
+		return nil, err
+	}
+
+	for postsQuery.Next() {
+		var post Post
+		err = postsQuery.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &post.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		posts = append(posts, post)
+	}
+
+	return posts, nil
+}

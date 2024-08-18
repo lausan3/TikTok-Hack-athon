@@ -9,6 +9,13 @@ import (
 )
 
 func PostRoutes(router *gin.RouterGroup, db *sql.DB) {
+
+	// get all posts
+	router.GET("posts", func(c *gin.Context) {
+		controller := new(controllers.PostController)
+		controller.GetAllPosts(c, db)
+	})
+
 	router.POST("posts/:username", func(c *gin.Context) {
 		controller := new(controllers.PostController)
 		controller.CreatePost(c, db)
@@ -18,4 +25,5 @@ func PostRoutes(router *gin.RouterGroup, db *sql.DB) {
 		controller := new(controllers.PostController)
 		controller.GetPostsByUser(c, db)
 	})
+
 }

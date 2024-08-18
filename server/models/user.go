@@ -37,8 +37,15 @@ func (m UserModel) Register(user forms.RegisterForm, db *sql.DB) error {
 		return errors.New("User already exists")
 	}
 
+	// hash password
+	hashedPassword, err := utils.GeneratePasswordHash(user.Password)
+
+	if err != nil {
+		return err
+	}
+
 	// Create a new user
-	_, err = db.Query("INSERT INTO users (user_name, password) VALUES (?, ?)", user.UserName, user.Password)
+	_, err = db.Query("INSERT INTO users (user_name, password) VALUES (?, ?)", user.UserName, hashedPassword)
 
 	if err != nil {
 		return err
