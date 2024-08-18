@@ -1,33 +1,16 @@
 name: Deploy Server
 
 on:
-  push:
-    branches:
-      - main  # or any branch you want to deploy from
+  workflow_run:
+    workflows: ["Docker Build"]
+    types:
+      - completed
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18.x' # Specify your Node.js version
-
-    - name: Install dependencies
-      run: |
-        cd server  # Navigate to the server folder
-        npm install
-
-    - name: Build project
-      run: |
-        cd server
-        npm run build # Adjust if your server uses a different command
-
     - name: Deploy to EC2
       uses: appleboy/ssh-action@v0.1.0
       with:
