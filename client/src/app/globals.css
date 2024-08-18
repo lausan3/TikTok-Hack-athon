@@ -40,7 +40,7 @@
   }
 
   .inner-content-container {
-    @apply flex w-full items-center justify-center mr-40;
+    @apply flex w-full justify-center my-8 lg:mr-40;
   }
 }
 
