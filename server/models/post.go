@@ -19,24 +19,6 @@ type Post struct {
 	CreatedAt string `json:"created_at"`
 }
 
-type PostResponse struct {
-	ID        int    `json:"id"`
-	UserID    int    `json:"user_id"`
-	UserName  string `json:"user_name"`
-	Title     string `json:"title"`
-	Content   string `json:"content"`
-	CreatedAt string `json:"created_at"`
-}
-
-type PostNotification struct {
-	PostID    int    `json:"post_id"`
-	Type      string `json:"type"`
-	UserName  string `json:"user_name"`
-	Title     string `json:"title"`
-	Content   string `json:"content"`
-	CreatedAt string `json:"created_at"`
-}
-
 type PostModel struct{}
 
 func (m PostModel) Create(c *gin.Context, post forms.CreatePostForm, db *sql.DB) (Post, error) {
@@ -110,8 +92,8 @@ func (m PostModel) GetPostsByUser(username string, db *sql.DB) ([]Post, error) {
 	return posts, nil
 }
 
-func (m PostModel) GetAllPosts(db *sql.DB) ([]PostResponse, error) {
-	var posts []PostResponse
+func (m PostModel) GetAllPosts(db *sql.DB) ([]Post, error) {
+	var posts []Post
 
 	postsQuery, err := db.Query("SELECT * FROM posts")
 	if err != nil {
@@ -119,7 +101,7 @@ func (m PostModel) GetAllPosts(db *sql.DB) ([]PostResponse, error) {
 	}
 
 	for postsQuery.Next() {
-		var post PostResponse
+		var post Post
 		err = postsQuery.Scan(&post.ID, &post.UserID, &post.UserName, &post.Title, &post.Content, &post.CreatedAt)
 		if err != nil {
 			return nil, err

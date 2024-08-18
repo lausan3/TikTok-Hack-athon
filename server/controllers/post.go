@@ -3,6 +3,7 @@ package controllers
 import (
 	"database/sql"
 	"encoding/json"
+	"main/entities"
 	"main/forms"
 	"main/models"
 	"net/http"
@@ -56,13 +57,17 @@ func (p *PostController) CreatePost(c *gin.Context, db *sql.DB, redisClient *red
 	}
 
 	// Create a notification
-	notification := models.PostNotification{
-		PostID:    post.ID,
-		Type:      "new_post",
-		UserName:  post.UserName,
-		Title:     post.Title,
-		Content:   post.Content,
-		CreatedAt: post.CreatedAt,
+	notification := entities.Notification[models.Post]{
+		Type:     "new_post",
+		UserName: post.UserName,
+		Content: models.Post{
+			ID:        post.ID,
+			UserID:    post.UserID,
+			UserName:  post.UserName,
+			Title:     post.Title,
+			Content:   post.Content,
+			CreatedAt: post.CreatedAt,
+		},
 	}
 
 	notificationJson, err := json.Marshal(notification)
@@ -106,7 +111,7 @@ func (p *PostController) GetPostsByUser(c *gin.Context, db *sql.DB) (posts []mod
 	return posts, nil
 }
 
-func (p *PostController) GetAllPosts(c *gin.Context, db *sql.DB) (posts []models.PostResponse, err error) {
+func (p *PostController) GetAllPosts(c *gin.Context, db *sql.DB) (posts []models.Post, err error) {
 	posts, err = postModel.GetAllPosts(db)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

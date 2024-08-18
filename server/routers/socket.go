@@ -4,12 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"main/entities"
 	"main/infra/logger"
 	validator "main/infra/utils/validators"
 	"main/models"
 	"main/routers/middleware"
 	"strconv"
-	"sync"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -17,9 +17,6 @@ import (
 )
 
 func RegisterWebSocketRoutes(ctx context.Context, upgrader websocket.Upgrader, router *gin.Engine, redisClient *redis.Client) {
-	connections := make(map[string]*websocket.Conn)
-	var connectionsMutex sync.RWMutex
-
 	router.GET("/ws", middleware.JwtAuthMiddleware(), func(c *gin.Context) {
 		conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 		if err != nil {
@@ -36,10 +33,6 @@ func RegisterWebSocketRoutes(ctx context.Context, upgrader websocket.Upgrader, r
 			return
 		}
 
-		connectionsMutex.Lock()
-		connections[userName] = conn
-		connectionsMutex.Unlock()
-
 		// add the connected user to the set of connected clients
 		check := redisClient.SAdd(ctx, "connectedClients", userName)
 
@@ -51,25 +44,16 @@ func RegisterWebSocketRoutes(ctx context.Context, upgrader websocket.Upgrader, r
 
 		defer func() {
 			conn.Close()
-			connectionsMutex.Lock()
-			delete(connections, userName)
-			connectionsMutex.Unlock()
 			redisClient.SRem(ctx, "connectedClients", userName)
 		}()
 
 		// subscribe to the "all" notification channel
 		pubsub := redisClient.Subscribe(ctx, "notifications:all")
-		// defer pubsub.Close()
+		defer pubsub.Close()
 
 		// listen for new messages being published to the "all" channel
-		for {
-			msg, err := pubsub.ReceiveMessage(ctx)
-			if err != nil {
-				logger.Errorf(err.Error())
-				return
-			}
-
-			var notification models.PostNotification
+		for msg := range pubsub.Channel() { // this will block until a new message is published to the channel
+			var notification entities.Notification[models.Post]
 			err = json.Unmarshal([]byte(msg.Payload), &notification)
 
 			if err != nil {
@@ -78,7 +62,7 @@ func RegisterWebSocketRoutes(ctx context.Context, upgrader websocket.Upgrader, r
 			}
 
 			if notification.Type == "new_post" {
-				post, err := getPost(notification.PostID, ctx, redisClient)
+				post, err := getPost(notification.Content.ID, ctx, redisClient)
 
 				if err != nil {
 					logger.Errorf(err.Error())
