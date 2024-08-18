@@ -1,7 +1,7 @@
 all: build run
 
 build:
-	go build main.go
+	go build -o server main.go
 
 run:
-	./main.exe
+	./server
