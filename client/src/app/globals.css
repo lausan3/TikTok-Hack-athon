@@ -36,7 +36,7 @@
   }
 
   .content-container {
-    @apply flex flex-row w-full h-full;
+    @apply flex flex-row w-full min-h-screen;
   }
 
   .inner-content-container {
