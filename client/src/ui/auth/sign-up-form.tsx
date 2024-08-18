@@ -25,13 +25,10 @@ export default function LogInForm() {
 
     try {
 
-      const response = await signUpUser(formData.username, formData.password);
+      const data = await signUpUser(formData.username, formData.password);
 
-      const data = await response.json()
-      if (response.ok) {
+      if (data.token) {
         setError(null); 
-
-        localStorage.setItem('tiktok_user_login', JSON.stringify({ username: formData.username, token: data.token, expires: data.expires }));
         
         router.push('/');
       } else {
