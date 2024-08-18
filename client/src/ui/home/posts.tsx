@@ -31,7 +31,7 @@ export default function Posts() {
       }
     }
     
-    setTimeout(() => getPosts(), 750)
+    setTimeout(() => getPosts(), 200)
   }, [])
 
   const [posts, setPosts] = useState<IPostData[]>([]);
@@ -41,7 +41,12 @@ export default function Posts() {
   }
   
   return (
-    <main id="posts" className="flex flex-col p-8 gap-4 flex-grow">
+    <main 
+      id="posts" 
+      className="flex flex-col p-8 gap-4"
+    >
+      <h1 className="text-xl font-bold text-center mb-4">Share your thoughts with the world, we won't judge.</h1>
+
       {
         posts.length > 0 ?
           posts.map((post, index) => {
