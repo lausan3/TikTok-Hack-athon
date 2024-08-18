@@ -2,3 +2,4 @@
 main.exe
 
 .env
+*.pem
