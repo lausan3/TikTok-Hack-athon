@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Footer from "@/ui/footer";
+import Navbar from "@/ui/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className}`}>
-        <div className="text-white min-h-dvh flex flex-col bg-gradient-radial from-gray-800 to-zinc-900">
+        <div className="text-white h-auto min-h-dvh flex flex-col bg-gradient-radial from-gray-800 to-zinc-900">
           {children}
         </div>
       </body>

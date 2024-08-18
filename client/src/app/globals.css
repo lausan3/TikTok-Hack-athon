@@ -36,11 +36,11 @@
   }
 
   .content-container {
-    @apply flex flex-row w-full;
+    @apply flex flex-row w-full h-full;
   }
 
   .inner-content-container {
-    @apply flex w-full justify-center my-8 lg:mr-40 h-fit;
+    @apply flex w-full justify-center my-8 lg:mr-40 h-fit flex-grow;
   }
 
   .cta-btn {

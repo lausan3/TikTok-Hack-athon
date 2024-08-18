@@ -42,7 +42,7 @@ export default function CreatePostForm() {
       className="form-container w-1/3 sm:w-1/2"
       onSubmit={(e) => handleSubmit(e)}
     >
-      <h1 className="w-1/2 text-xl font-bold text-center mb-4">Share your thoughts with the world, we won't judge.</h1>
+      <h1 className="w-1/2 text-xl font-bold text-center mb-4">Share your thoughts with the world, we won&apos;t judge.</h1>
 
       <p className={`${error ? 'text-red-500' : 'hidden'} text-sm`}>{error}</p>
 
