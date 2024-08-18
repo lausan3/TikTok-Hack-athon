@@ -87,7 +87,7 @@ export default function LogInForm() {
           </p>
         </div>
         <button 
-          className="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4"
+          className="cta-btn"
           type="submit"
         >Log In</button>
       </form>
