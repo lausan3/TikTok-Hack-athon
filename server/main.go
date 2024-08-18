@@ -15,6 +15,9 @@ func main() {
 	db := connections.OpenMySQLConnection()
 	defer db.Close()
 
+	redis := connections.OpenRedisConnection()
+	defer redis.Close()
+
 	router := routers.Routes(db)
 
 	logger.Fatalf("%v", router.Run(config.ServerConfig()))
