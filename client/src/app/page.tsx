@@ -14,9 +14,13 @@ export default function Home() {
     <>
       <Navbar />
 
-      <div className="flex flex-row flex-grow">
+      <div className="content-container">
         <Sidebar />
-        <Posts />
+
+        <div className="inner-content-container">
+          <Posts />
+        </div>
+
       </div>
 
       <Footer />

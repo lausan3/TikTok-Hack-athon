@@ -13,12 +13,17 @@ export default function CreatePost() {
     <>
       <Navbar />
 
-      <div className="flex flex-row flex-grow">
+      <div className="content-container">
         <Sidebar />
-        <CreatePostForm />
+
+        <div className="inner-content-container">
+          <CreatePostForm />
+        </div>
+
       </div>
-        
+
       <Footer />
+        
     </>
   );
 }

@@ -7,7 +7,10 @@ export default function Sidebar() {
   const [notifications, setNotifications] = useState([]);
   
   return (
-    <section id="sidebar" className="flex flex-col w-1/3 h-full py-2 px-4 bg-zinc-900">
+    <section 
+      id="sidebar" 
+      className="w-1/5 h-auto p-4 bg-zinc-900"
+    >
       <div className="sidebar-stack mb-6">
         <p className="subheading-text">Navigation</p>
         
@@ -29,8 +32,8 @@ export default function Sidebar() {
             notifications.map(notification => (
               <p className="notification">{notification}</p>
             )) 
-            :
-              <p className="notification">No notifications D:</p>
+          :
+            <p className="notification">No notifications D:</p>
         }
       </div>
     </section>
