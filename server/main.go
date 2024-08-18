@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"main/config"
 	"main/db/connections"
 	"main/infra/logger"
@@ -18,7 +19,9 @@ func main() {
 	redis := connections.OpenRedisConnection()
 	defer redis.Close()
 
-	router := routers.Routes(db)
+	ctx := context.Background()
+
+	router := routers.Routes(ctx, db, redis)
 
 	logger.Fatalf("%v", router.Run(config.ServerConfig()))
 }

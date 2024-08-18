@@ -7,9 +7,10 @@ import (
 	"main/routers/middleware"
 
 	"github.com/gin-gonic/gin"
+	"github.com/redis/go-redis/v9"
 )
 
-func PostRoutes(router *gin.RouterGroup, db *sql.DB) {
+func PostRoutes(router *gin.RouterGroup, db *sql.DB, redisClient *redis.Client) {
 	postController := new(controllers.PostController)
 
 	// get all posts
@@ -18,7 +19,7 @@ func PostRoutes(router *gin.RouterGroup, db *sql.DB) {
 	})
 
 	router.POST("posts/:username", middleware.JwtAuthMiddleware(), func(c *gin.Context) {
-		postController.CreatePost(c, db)
+		postController.CreatePost(c, db, redisClient)
 	})
 
 	router.GET("posts/:username", func(c *gin.Context) {

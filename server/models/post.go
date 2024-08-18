@@ -25,24 +25,48 @@ type PostResponse struct {
 	CreatedAt string `json:"created_at"`
 }
 
+type PostNotification struct {
+	PostID    int    `json:"post_id"`
+	Type      string `json:"type"`
+	UserName  string `json:"user_name"`
+	Title     string `json:"title"`
+	Content   string `json:"content"`
+	CreatedAt string `json:"created_at"`
+}
+
 type PostModel struct{}
 
-func (m PostModel) Create(username string, post forms.CreatePostForm, db *sql.DB) error {
+func (m PostModel) Create(username string, post forms.CreatePostForm, db *sql.DB) (Post, error) {
+	var postRes Post
+
 	check, err := utils.CheckIfUserExists(username, db)
 	if err != nil {
-		return err
+		return postRes, err
 	}
 
 	if !check {
-		return errors.New("User does not exist")
+		return postRes, errors.New("User does not exist")
 	}
 
 	_, err = db.Query("INSERT INTO posts (user_id, user_name, title, content) VALUES ((SELECT id FROM users WHERE user_name = ?), ?, ?, ?)", username, username, post.Title, post.Content)
 	if err != nil {
-		return err
+		return postRes, err
 	}
 
-	return nil
+	// query the post
+	postQuery, err := db.Query("SELECT * FROM posts WHERE user_name = ? AND title = ? AND content = ?", username, post.Title, post.Content)
+	if err != nil {
+		return postRes, err
+	}
+
+	for postQuery.Next() {
+		err = postQuery.Scan(&postRes.ID, &postRes.UserID, &postRes.UserName, &postRes.Title, &postRes.Content, &postRes.CreatedAt)
+		if err != nil {
+			return postRes, err
+		}
+	}
+
+	return postRes, nil
 }
 
 func (m PostModel) GetPostsByUser(username string, db *sql.DB) ([]Post, error) {

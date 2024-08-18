@@ -2,12 +2,14 @@ package controllers
 
 import (
 	"database/sql"
-	"fmt"
+	"encoding/json"
 	"main/forms"
 	"main/models"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/redis/go-redis/v9"
 )
 
 type PostController struct{}
@@ -15,7 +17,7 @@ type PostController struct{}
 var postModel = new(models.PostModel)
 var postForm = new(forms.PostForm)
 
-func (p *PostController) CreatePost(c *gin.Context, db *sql.DB) (post models.Post, err error) {
+func (p *PostController) CreatePost(c *gin.Context, db *sql.DB, redisClient *redis.Client) (post models.Post, err error) {
 	var postFormCreate forms.CreatePostForm
 	username := c.Param("username")
 
@@ -27,17 +29,63 @@ func (p *PostController) CreatePost(c *gin.Context, db *sql.DB) (post models.Pos
 		return post, validatorErr
 	}
 
-	if validatorErr := postModel.Create(username, postFormCreate, db); validatorErr != nil {
-		fmt.Println(validatorErr)
+	post, err = postModel.Create(username, postFormCreate, db)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": validatorErr.Error(),
+			"error": err.Error(),
 		})
-		return post, validatorErr
+		return post, err
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Post created successfully",
-	})
+	id := strconv.Itoa(post.ID)
+
+	postJSON, err := json.Marshal(post)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return post, err
+	}
+
+	// add post to redis
+	err = redisClient.Set(c, "post:"+id, postJSON, 0).Err()
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return post, err
+	}
+
+	// Create a notification
+	notification := models.PostNotification{
+		PostID:    post.ID,
+		Type:      "new_post",
+		UserName:  post.UserName,
+		Title:     post.Title,
+		Content:   post.Content,
+		CreatedAt: post.CreatedAt,
+	}
+
+	notificationJson, err := json.Marshal(notification)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return post, err
+	}
+
+	// Publish the notification to "notifications:all" channel
+	err = redisClient.Publish(c, "notifications:all", notificationJson).Err()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return post, err
+	}
+
+	c.JSON(http.StatusOK, post)
 
 	return post, nil
 }
