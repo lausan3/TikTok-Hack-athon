@@ -1,0 +1,42 @@
+name: Deploy Server
+
+on:
+  push:
+    branches:
+      - main  # or any branch you want to deploy from
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18.x' # Specify your Node.js version
+
+    - name: Install dependencies
+      run: |
+        cd server  # Navigate to the server folder
+        npm install
+
+    - name: Build project
+      run: |
+        cd server
+        npm run build # Adjust if your server uses a different command
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v0.1.0
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        port: 22
+        script: |
+          docker pull ${{ secrets.DOCKERHUB_TAGS }}  # Pull the latest image
+          docker stop server || true  # Stop the running container if it exists
+          docker rm server || true  # Remove the container if it exists
+          docker run -d -p 80:3000 ${{ secrets.DOCKERHUB_TAGS }}  # Run the new container
