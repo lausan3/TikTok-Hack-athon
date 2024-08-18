@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"main/forms"
 	validator "main/infra/utils/validators"
-	"main/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -37,7 +36,7 @@ func (u *AuthController) LoginUser(c *gin.Context, db *sql.DB) (token validator.
 	return token, nil
 }
 
-func (u *AuthController) RegisterUser(c *gin.Context, db *sql.DB) (user models.User, err error) {
+func (u *AuthController) RegisterUser(c *gin.Context, db *sql.DB) (token validator.Token, err error) {
 	// get the request body and bind it to the RegisterForm struct
 	var registerForm forms.RegisterForm
 
@@ -46,19 +45,18 @@ func (u *AuthController) RegisterUser(c *gin.Context, db *sql.DB) (user models.U
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": message,
 		})
-		return user, err
+		return token, err
 	}
 
-	if err := userModel.Register(registerForm, db); err != nil {
+	token, err = userModel.Register(registerForm, db)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
-		return user, err
+		return token, err
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "User created successfully",
-	})
+	c.JSON(http.StatusOK, token)
 
-	return user, nil
+	return token, nil
 }

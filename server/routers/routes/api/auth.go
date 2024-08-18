@@ -16,7 +16,7 @@ func AuthRoutes(router *gin.RouterGroup, db *sql.DB) {
 		authController.LoginUser(c, db)
 	})
 
-	router.POST("signup", func(c *gin.Context) {
+	group.POST("signup", func(c *gin.Context) {
 		authController.RegisterUser(c, db)
 	})
 }

@@ -17,33 +17,41 @@ type User struct {
 
 type UserModel struct{}
 
-func (m UserModel) Register(user forms.RegisterForm, db *sql.DB) error {
+func (m UserModel) Register(user forms.RegisterForm, db *sql.DB) (validator.Token, error) {
+	var token validator.Token
+
 	// check if user exists
 	check, err := utils.CheckIfUserExists(user.UserName, db)
 
 	if err != nil {
-		return err
+		return token, err
 	}
 
 	if check {
-		return errors.New("User already exists")
+		return token, errors.New("User already exists")
 	}
 
 	// hash password
 	hashedPassword, err := validator.GeneratePasswordHash(user.Password)
 
 	if err != nil {
-		return err
+		return token, err
 	}
 
 	// Create a new user
 	_, err = db.Query("INSERT INTO users (user_name, password) VALUES (?, ?)", user.UserName, hashedPassword)
 
 	if err != nil {
-		return err
+		return token, err
 	}
 
-	return nil
+	token, err = validator.GenerateToken(user.UserName)
+
+	if err != nil {
+		return token, err
+	}
+
+	return token, nil
 }
 
 func (m UserModel) Get(userName string, db *sql.DB) (User, error) {
