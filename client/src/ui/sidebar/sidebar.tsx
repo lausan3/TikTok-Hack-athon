@@ -7,17 +7,11 @@ import { useEffect, useState } from "react";
 import ClearNotifications from "./clear-notifications";
 import Notification from "./notification";
 
-const localData = localStorage.getItem("tiktok_user_login");
 let socket: WebSocket | null = null;
-
-if (localData) {
-  const userData = JSON.parse(localData);
-  socket = connectWebsocket(userData.token)
-}
 
 export default function Sidebar() {
   const [notifications, setNotifications] = useState<IPostData[]>([]);
-  const [loggedIn, setLoggedIn] = useState(localStorage.getItem("tiktok_user_login"));
+  const [loggedIn, setLoggedIn] = useState<string | null>(null);
 
   useEffect(() => {
     let intervalId: any;

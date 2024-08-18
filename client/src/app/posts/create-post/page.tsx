@@ -1,21 +1,19 @@
-"use client"
-
+import CheckAuth from "@/ui/auth/check-auth";
 import Footer from "@/ui/footer";
 import Navbar from "@/ui/navbar";
 import CreatePostForm from "@/ui/posts/create-post/create-post-form";
 import Sidebar from "@/ui/sidebar/sidebar";
-import { redirect } from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Create Post'
+}
 
 export default function CreatePost() {
-  const data = localStorage.getItem('tiktok_user_login');
-  
-  if (!data) {
-    redirect('/auth/login');
-  }
-
   return (
     <>
       <Navbar />
+      <CheckAuth />
 
       <div className="content-container">
         <Sidebar />

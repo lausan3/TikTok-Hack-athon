@@ -82,7 +82,7 @@ export default function LogInForm() {
           </div>
 
           <p className="text-sm text-label">
-            Don't have an account?
+            Don&apos;t have an account?
             <Link className="normal-link text-sm" href="/auth/sign-up"> Sign up!</Link>
           </p>
         </div>
