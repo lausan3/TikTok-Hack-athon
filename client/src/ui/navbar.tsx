@@ -1,8 +1,9 @@
-import Link from "next/link";
+"use client"
 import Logo from "./logo";
+import { LoginButton, SignOutButton } from "./auth/auth-buttons";
 
 export default function Navbar() {
-  const user = false;
+  const user = localStorage.getItem('tiktok_user_login') ? true : false;
 
   return (
     <nav id="navbar" className="flex flex-row items-center bg-header-footer px-6 py-4 shadow-md shadow-zinc-900">
@@ -11,12 +12,12 @@ export default function Navbar() {
       
       <div id="spacer" className="flex-grow"></div>
 
-      <Link
-        href="/auth/login"
-        className="nav-link"
-      >
-        {user ? "Sign Out" : "Sign In to Post"}
-      </Link>
+      {
+        user ?
+          <SignOutButton />
+        :
+          <LoginButton />
+      }
     </nav>
   )
 }
