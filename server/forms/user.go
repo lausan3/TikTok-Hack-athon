@@ -13,6 +13,11 @@ type RegisterForm struct {
 	Password string `json:"password" binding:"required"`
 }
 
+type LoginForm struct {
+	UserName string `json:"user_name" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
 func (u UserForm) UserName(tag string, errMsg ...string) (message string) {
 	switch tag {
 	case "required":
