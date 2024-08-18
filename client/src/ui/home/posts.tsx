@@ -50,7 +50,7 @@ export default function Posts() {
       {
         posts.length > 0 ?
           posts.map((post, index) => {
-            const date: string = `${new Date(post.created_at).toLocaleDateString()} at ${new Date(post.created_at).toLocaleTimeString()}`;
+            const date: string = `${new Date(post.created_at).toLocaleDateString()} at ${new Date(post.created_at + " UTC").toLocaleTimeString()}`;
 
             return (
               <div key={index} className="flex flex-col h-fit gap-2 p-8 border border-zinc-700 bg-bg-primary rounded-lg">

@@ -1,4 +1,4 @@
-export const signUpUser = async (username: string, password: string) => {
+export const signUpUser = async (user_name: string, password: string) => {
   try {
     const URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
@@ -7,19 +7,17 @@ export const signUpUser = async (username: string, password: string) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ user_name, password }),
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      return data;
-    }
+    return response;
   } catch (error) {
     console.error(error);
+    return new Response(JSON.stringify({ error: error }), { status: 400 });
   }
 }
 
-export const loginUser = async (username: string, password: string) => {
+export const loginUser = async (user_name: string, password: string) => {
   try {
     const URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
@@ -28,14 +26,12 @@ export const loginUser = async (username: string, password: string) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ user_name, password }),
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      return data;
-    }
+    return response;
   } catch (error) {
     console.error(error);
+    return new Response(JSON.stringify({ error: error }), { status: 400 });
   }
 }
