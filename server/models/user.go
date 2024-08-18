@@ -4,17 +4,9 @@ import (
 	"database/sql"
 	"errors"
 	"main/forms"
-	"main/infra/utils"
+	utils "main/infra/utils"
+	validator "main/infra/utils/validator"
 )
-
-/**
-CREATE TABLE IF NOT EXISTS users (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	user_name VARCHAR(255) NOT NULL,
-	password VARCHAR(255) NOT NULL,
-	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-*/
 
 type User struct {
 	ID        int    `json:"id"`
@@ -38,7 +30,7 @@ func (m UserModel) Register(user forms.RegisterForm, db *sql.DB) error {
 	}
 
 	// hash password
-	hashedPassword, err := utils.GeneratePasswordHash(user.Password)
+	hashedPassword, err := validator.GeneratePasswordHash(user.Password)
 
 	if err != nil {
 		return err
@@ -90,7 +82,7 @@ func (m UserModel) Delete(userName string, db *sql.DB) error {
 	}
 
 	// delete all posts by user
-	_, err = db.Query("DELETE FROM posts WHERE user_name = ?", userName)
+	_, err = db.Query("DELETE FROM posts WHERE user_id = (SELECT id FROM users WHERE user_name = ?)", userName)
 
 	if err != nil {
 		return err
@@ -104,4 +96,40 @@ func (m UserModel) Delete(userName string, db *sql.DB) error {
 	}
 
 	return nil
+}
+
+func (m UserModel) Login(user forms.LoginForm, db *sql.DB) (validator.Token, error) {
+	var token validator.Token
+
+	check, err := utils.CheckIfUserExists(user.UserName, db)
+
+	if err != nil {
+		return token, err
+	}
+
+	if !check {
+		return token, errors.New("User does not exist")
+	}
+
+	var hashedPassword string
+
+	err = db.QueryRow("SELECT password FROM users WHERE user_name = ?", user.UserName).Scan(&hashedPassword)
+
+	if err != nil {
+		return token, err
+	}
+
+	err = validator.VerifyPassword(user.Password, hashedPassword)
+
+	if err != nil {
+		return token, errors.New("Invalid password")
+	}
+
+	token, err = validator.GenerateToken(user.UserName)
+
+	if err != nil {
+		return token, err
+	}
+
+	return token, nil
 }
