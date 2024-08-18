@@ -6,6 +6,8 @@ export default function Navbar() {
     <nav id="navbar" className="flex flex-row items-center bg-header-footer px-6 py-4 shadow-md shadow-zinc-800">
 
       <Logo />
+      
+      <div id="spacer" className="flex-grow"></div>
 
       <Link
         href="/posts/create-post"
