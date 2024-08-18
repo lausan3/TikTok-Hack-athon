@@ -2,7 +2,6 @@
 # Server
 ### Endpoints
 #### Users
-- POST /api/users - Create a user, body: { username: string, password: string }
 - GET /api/users/:username - Get a user
 - 
 #### Posts
@@ -14,4 +13,5 @@
 - DELETE /api/admin/users/:username - Delete a post for a user, headers: { admin_key: string }
 
 #### Auth
+- POST /api/auth/signup - Create a user, body: { username: string, password: string }
 - POST /api/auth/login - Login, body: { username: string, password: string }
