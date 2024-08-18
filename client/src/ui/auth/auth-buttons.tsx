@@ -5,7 +5,7 @@ export function LoginButton() {
   return (
     <Link
       href="/auth/login"
-      className="nav-link"
+      className="nav-link text-lg"
     >
       Sign in to post
     </Link>
@@ -16,7 +16,7 @@ export function SignOutButton() {
   return (
     <Link
       href="/auth/sign-up"
-      className="nav-link"
+      className="nav-link text-lg"
       onClick={signOutUser}
     >
       Sign Out

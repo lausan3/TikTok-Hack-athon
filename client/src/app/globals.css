@@ -10,7 +10,7 @@
   }
   
   .nav-link {
-    @apply text-lg transition-colors duration-500 px-4 py-2 rounded-xl border border-zinc-700 shadow-2xl
+    @apply text-xs sm:text-lg transition-colors duration-500 px-4 py-2 rounded-xl border border-zinc-700 shadow-2xl
     hover:bg-bg-on-hover;
   }
 
@@ -19,11 +19,11 @@
   }
 
   .subheading-text {
-    @apply text-lg font-semibold px-1;
+    @apply text-sm sm:text-lg font-semibold px-1;
   }
 
   .notification {
-    @apply px-1;
+    @apply px-1 text-autosize;
   }
 
   .normal-link {
@@ -44,13 +44,17 @@
   }
 
   .cta-btn {
-    @apply bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4;
+    @apply bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 text-balance text-center;
   }
 }
 
 @layer utilities {
   .bg-header-footer {
     @apply bg-zinc-800;
+  }
+
+  .text-autosize {
+    @apply text-sm sm:text-lg;
   }
 }
 

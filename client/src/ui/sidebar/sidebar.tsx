@@ -3,12 +3,12 @@
 import { connectWebsocket } from "@/lib/ws";
 import { IPostData } from "@/types/types";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ClearNotifications from "./clear-notifications";
+import Notification from "./notification";
 
 const localData = localStorage.getItem("tiktok_user_login");
 let socket: WebSocket | null = null;
-let userData: any;
 
 if (localData) {
   const userData = JSON.parse(localData);
@@ -21,7 +21,6 @@ export default function Sidebar() {
 
   useEffect(() => {
     let intervalId: any;
-
     
     if (loggedIn) {
       intervalId = setInterval(() => { 
@@ -32,7 +31,6 @@ export default function Sidebar() {
           setNotifications(JSON.parse(prevNotifications));
         }
 
-        
         // Check if WebSocket is not open and reconnect if necessary
         if (!socket || socket.readyState !== WebSocket.OPEN) {
           const parsedData = JSON.parse(loggedIn);
@@ -72,14 +70,9 @@ export default function Sidebar() {
         {
           loggedIn ? (
             notifications.length > 0 ? 
-              notifications.map((notification, index) => (
-                <div key={index} className="flex flex-col">
-                  <h3>{notification.title}</h3>
-                  <p>{notification.content}</p>
-                  <small>{notification.user_name}</small>
-                  <small>{notification.created_at}</small>
-                </div>
-              )) 
+              notifications.map((notification, index) => 
+                <Notification index={index} notification={notification}/>
+              ) 
             :
               <p className="notification">No notifications D:</p>
             )

@@ -3,7 +3,7 @@
 import Footer from "@/ui/footer";
 import Navbar from "@/ui/navbar";
 import CreatePostForm from "@/ui/posts/create-post/create-post-form";
-import Sidebar from "@/ui/sidebar";
+import Sidebar from "@/ui/sidebar/sidebar";
 import { redirect } from "next/navigation";
 
 export default function CreatePost() {
