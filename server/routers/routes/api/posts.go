@@ -18,7 +18,7 @@ func PostRoutes(router *gin.RouterGroup, db *sql.DB, redisClient *redis.Client) 
 		postController.GetAllPosts(c, db)
 	})
 
-	router.POST("posts/:username", middleware.JwtAuthMiddleware(), func(c *gin.Context) {
+	router.POST("posts", middleware.JwtAuthMiddleware(), func(c *gin.Context) {
 		postController.CreatePost(c, db, redisClient)
 	})
 

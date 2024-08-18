@@ -19,8 +19,6 @@ var postForm = new(forms.PostForm)
 
 func (p *PostController) CreatePost(c *gin.Context, db *sql.DB, redisClient *redis.Client) (post models.Post, err error) {
 	var postFormCreate forms.CreatePostForm
-	username := c.Param("username")
-
 	if validatorErr := c.ShouldBindJSON(&postFormCreate); validatorErr != nil {
 		message := postForm.Create(validatorErr)
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -29,7 +27,7 @@ func (p *PostController) CreatePost(c *gin.Context, db *sql.DB, redisClient *red
 		return post, validatorErr
 	}
 
-	post, err = postModel.Create(username, postFormCreate, db)
+	post, err = postModel.Create(c, postFormCreate, db)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),

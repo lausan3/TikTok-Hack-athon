@@ -5,6 +5,9 @@ import (
 	"errors"
 	"main/forms"
 	"main/infra/utils"
+	validator "main/infra/utils/validators"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Post struct {
@@ -36,8 +39,15 @@ type PostNotification struct {
 
 type PostModel struct{}
 
-func (m PostModel) Create(username string, post forms.CreatePostForm, db *sql.DB) (Post, error) {
+func (m PostModel) Create(c *gin.Context, post forms.CreatePostForm, db *sql.DB) (Post, error) {
 	var postRes Post
+
+	// get username from token
+	username, err := validator.ExtractTokenMetadata(c)
+
+	if err != nil {
+		return postRes, err
+	}
 
 	check, err := utils.CheckIfUserExists(username, db)
 	if err != nil {
