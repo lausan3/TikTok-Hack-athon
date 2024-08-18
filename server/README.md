@@ -7,7 +7,7 @@
 #### Posts
 - GET /api/posts - Get all posts
 - GET /api/posts/:username - Get all posts for a user
-- POST /api/posts/:username - Create a post for a user, body: { title: string, content: string }
+- POST /api/posts - Create a post for a user, body: { title: string, content: string } headers: { Authorization: string }
   
 #### Admin
 - DELETE /api/admin/users/:username - Delete a post for a user, headers: { admin_key: string }
