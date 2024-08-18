@@ -11,34 +11,40 @@ let socket: WebSocket | null = null;
 
 export default function Sidebar() {
   const [notifications, setNotifications] = useState<IPostData[]>([]);
-  const [loggedIn, setLoggedIn] = useState<string | null>(null);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
-    let intervalId: any;
     
-    if (loggedIn) {
-      intervalId = setInterval(() => { 
-        const prevNotifications = localStorage.getItem("notifications");
-
-        if (prevNotifications) {
-          setNotifications(JSON.parse(prevNotifications));
-        } else {
-          setNotifications([]);
-        }
-
-        // Check if WebSocket is not open and reconnect if necessary
-        if (!socket || socket.readyState !== WebSocket.OPEN) {
-          const parsedData = JSON.parse(loggedIn);
-          console.log("WebSocket is not open, reconnecting...");
-          socket = connectWebsocket(parsedData.token);
-        }
-      }, 1000);
-    } else {
-      setLoggedIn(localStorage.getItem("tiktok_user_login"));
+    if (!token) {
+      const localData = localStorage.getItem("tiktok_user_login");
+      
+      if (localData) {
+        const parsedData = JSON.parse(localData);
+        setToken(parsedData.token);
+      }
     }
 
+    // Check for notifications every second
+    const intervalId = setInterval(() => { 
+      // console.log("Checking for notifications...");
+
+      const prevNotifications = localStorage.getItem("notifications");
+
+      if (prevNotifications) {
+        setNotifications(JSON.parse(prevNotifications));
+      } else {
+        setNotifications([]);
+      }
+
+      // Check if WebSocket is not open and reconnect if necessary
+      if (token && (!socket || socket.readyState !== WebSocket.OPEN)) {
+        console.log("WebSocket is not open, reconnecting...");
+        socket = connectWebsocket(token);
+      }
+    }, 1000);
+
     return () => clearInterval(intervalId);
-  }, []);
+  }, [token]);
   
   return (
     <section 
@@ -63,7 +69,7 @@ export default function Sidebar() {
         <ClearNotifications />
         
         {
-          loggedIn ? (
+          token ? (
             notifications.length > 0 ? 
               notifications.map((notification, index) => 
                 <Notification key={index} notification={notification}/>

@@ -2,7 +2,7 @@ import { IPostData } from "@/types/types";
 
 export function connectWebsocket(token: string) {  
   const HOST = process.env.NEXT_PUBLIC_HOST || "ws://localhost:8080";
-  const ws = new WebSocket(`ws://${HOST}/ws?token=${token}`);
+  const ws = new WebSocket(`ws://hack.tiktok.marouaneh.me/ws?token=${token}`);
   
   ws.onopen = () => {
     console.log("Connected to websocket");
