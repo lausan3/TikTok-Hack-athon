@@ -10,7 +10,7 @@
   }
   
   .nav-link {
-    @apply text-lg transition-colors duration-500 px-4 py-2 rounded-lg border border-zinc-700 shadow-lg
+    @apply text-lg transition-colors duration-500 px-4 py-2 rounded-xl border border-zinc-700 shadow-2xl
     hover:bg-bg-on-hover;
   }
 
@@ -25,6 +25,23 @@
   .notification {
     @apply px-1;
   }
+
+  .normal-link {
+    @apply text-lg text-blue-600 transition-colors duration-300
+    hover:text-blue-500;
+  }
+
+  .form-container {
+    @apply flex flex-col space-y-4 bg-bg-primary py-8 px-2 rounded-2xl items-center shadow-lg shadow-zinc-900;
+  }
+
+  .content-container {
+    @apply flex flex-row w-full flex-grow;
+  }
+
+  .inner-content-container {
+    @apply flex w-full items-center justify-center mr-40;
+  }
 }
 
 @layer utilities {
@@ -35,7 +52,7 @@
 
 @layer base {
   button {
-    @apply p-2 bg-bg-primary rounded-lg transition-colors duration-300
+    @apply p-2 bg-bg-primary rounded-xl transition-colors duration-300
     hover:bg-bg-on-hover;
   }
   
