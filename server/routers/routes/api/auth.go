@@ -10,9 +10,13 @@ import (
 
 func AuthRoutes(router *gin.RouterGroup, db *sql.DB) {
 	group := router.Group("/auth")
+	authController := new(controllers.AuthController)
 
 	group.POST("login", func(c *gin.Context) {
-		controller := new(controllers.AuthController)
-		controller.LoginUser(c, db)
+		authController.LoginUser(c, db)
+	})
+
+	router.POST("signup", func(c *gin.Context) {
+		authController.RegisterUser(c, db)
 	})
 }

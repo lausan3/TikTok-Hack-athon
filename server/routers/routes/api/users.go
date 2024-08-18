@@ -9,13 +9,9 @@ import (
 )
 
 func UserRoutes(router *gin.RouterGroup, db *sql.DB) {
-	router.POST("users", func(c *gin.Context) {
-		controller := new(controllers.UserController)
-		controller.RegisterUser(c, db)
-	})
+	userController := new(controllers.UserController)
 
 	router.GET("users/:username", func(c *gin.Context) {
-		controller := new(controllers.UserController)
-		controller.GetUser(c, db)
+		userController.GetUser(c, db)
 	})
 }

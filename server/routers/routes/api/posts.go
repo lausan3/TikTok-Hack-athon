@@ -10,20 +10,19 @@ import (
 )
 
 func PostRoutes(router *gin.RouterGroup, db *sql.DB) {
+	postController := new(controllers.PostController)
+
 	// get all posts
 	router.GET("posts", func(c *gin.Context) {
-		controller := new(controllers.PostController)
-		controller.GetAllPosts(c, db)
+		postController.GetAllPosts(c, db)
 	})
 
 	router.POST("posts/:username", middleware.JwtAuthMiddleware(), func(c *gin.Context) {
-		controller := new(controllers.PostController)
-		controller.CreatePost(c, db)
+		postController.CreatePost(c, db)
 	})
 
 	router.GET("posts/:username", func(c *gin.Context) {
-		controller := new(controllers.PostController)
-		controller.GetPostsByUser(c, db)
+		postController.GetPostsByUser(c, db)
 	})
 
 }
