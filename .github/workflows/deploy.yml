@@ -19,6 +19,8 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         port: 22
         script: |
+          sudo su
+          docker system prune -f
           docker pull ${{ secrets.DOCKERHUB_TAGS }}
           sudo docker rm -f $(docker ps -aq)
-          docker run -d -p 80:3000 --env-file ~/.env ${{ secrets.DOCKERHUB_TAGS }}
+          docker run -d -p 80:3000 --env-file ./.env ${{ secrets.DOCKERHUB_TAGS }}
