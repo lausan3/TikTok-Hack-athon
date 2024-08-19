@@ -4,9 +4,9 @@
 
 - [About](https://github.com/lausan3/hs-hackathon2-tiktok?tab=readme-ov-file#about)
 - [Stack](https://github.com/lausan3/hs-hackathon2-tiktok?tab=readme-ov-file#stack)
-- [Front-end](https://github.com/lausan3/hs-hackathon2-tiktok?tab=readme-ov-file#demo)
-- [Back-end](https://github.com/lausan3/hs-hackathon2-tiktok?tab=readme-ov-file#api-routes)
-- [Demo Video](https://github.com/lausan3/hs-hackathon2-tiktok?tab=readme-ov-file#front-end)
+- [Front-end](https://github.com/lausan3/hs-hackathon2-tiktok?tab=readme-ov-file#front-end)
+- [Back-end](https://github.com/lausan3/hs-hackathon2-tiktok?tab=readme-ov-file#back-end)
+- [Demo Video](https://github.com/lausan3/hs-hackathon2-tiktok?tab=readme-ov-file#demo)
 
 # About
 
