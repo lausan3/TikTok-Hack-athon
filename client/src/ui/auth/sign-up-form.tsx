@@ -91,7 +91,7 @@ export default function LogInForm() {
             <label
               htmlFor="confirm-password"
               >
-              Password
+              Confirm Password
             </label>
             <input
               name="confirm-password"
