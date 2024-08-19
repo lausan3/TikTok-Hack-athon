@@ -2,11 +2,11 @@
 
 # Contents
 
-- [About](https://github.com/lausan3/hs-hackathon2-tiktok/edit/main/README.md#about)
-- [Stack](https://github.com/lausan3/hs-hackathon2-tiktok/edit/main/README.md#stack)
-- [Front-end](https://github.com/lausan3/hs-hackathon2-tiktok/edit/main/README.md#demo)
-- [Back-end](https://github.com/lausan3/hs-hackathon2-tiktok/edit/main/README.md#api-routes)
-- [Demo Video](https://github.com/lausan3/hs-hackathon2-tiktok/edit/main/README.md#front-end)
+- [About](https://github.com/lausan3/hs-hackathon2-tiktok/main/README.md#about)
+- [Stack](https://github.com/lausan3/hs-hackathon2-tiktok/main/README.md#stack)
+- [Front-end](https://github.com/lausan3/hs-hackathon2-tiktok/main/README.md#demo)
+- [Back-end](https://github.com/lausan3/hs-hackathon2-tiktok/main/README.md#api-routes)
+- [Demo Video](https://github.com/lausan3/hs-hackathon2-tiktok/main/README.md#front-end)
 
 # About
 
