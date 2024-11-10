@@ -39,7 +39,7 @@ Sign-up form
 
 
 # Back-end
-The web API was built by Marouane in Golang using the Gin http framework. It includes endpoints for user authentication, a real-time notification system for each post built using WebSockets and Redis PubSub.
+The web API was built by Marouane in Golang using the Gin http framework. It includes endpoints for user authentication and a real-time notification system for each post built using WebSockets and Redis PubSub.
 
 ### Endpoints
 #### Users
